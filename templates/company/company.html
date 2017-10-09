@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/css/base.css" rel='stylesheet' type='text/css' />
+    <title>网约车公司信息查询</title>
+</head>
+<body>
+{% load myfilter %}
+<form action="/companylist/" method="post">
+<div class="selectstype">
+    公司名称:<input type="text" name="companyname" placeholder="公司名称" />
+    统一社会信用代码:<input type="text" name="uniformsocialcreditcode" placeholder="统一社会信用代码" />
+    注册地行政区划:<input type="text" name="registrydivisions" placeholder="注册地行政区划" />
+    经营业户经济类型:<input type="text" name="economicoperationtype" placeholder="经营业户经济类型" />
+
+    <input type="submit" value="查询">
+
+</div>
+<table border="1" class="listtype">
+        <tr align="center" bgcolor="#e1ffc1">
+            <td width="30"  align="center">公司名称</td>
+            <td width="30"  align="center">统一社会信用代码</td>
+            <td width="50"  align="center">注册地行政区划</td>
+            <td width="70"  align="center">经营业户经济类型</td>
+            <td width="20"  align="center">注册资本</td>
+            <td width="40"  align="center">法人代表</td>
+            <td width="100"  align="center">法人身份证号</td>
+            <td width="30"  align="center">电话号码</td>
+            <td width="100"  align="center">通讯地址</td>
+            <td width="85"  align="center">经营范围</td>
+            <td width="75"  align="center">经营区域</td>
+            <td width="40"  align="center">业户名称</td>
+            <td width="65"  align="center">发证机构</td>
+            <td width="100"  align="center">更新日期</td>
+            <td width="80"  align="center">操作</td>
+        </tr>
+        {% for item in companylist %}
+            <tr>
+                <td>{{ item.companyname }}</td>
+                <td>{{ item.uniformsocialcreditcode }}</td>
+                <td>{{ item.registrydivisions }}</td>
+                <td>{{ item.economicoperationtype }}</td>
+                <td>{{ item.registeredcapital }}</td>
+                <td>{{ item.legalrepresentative }}</td>
+                <td>{{ item.legalpersonidentification }}</td>
+                <td>{{ item.phone_number }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.businessscope }}</td>
+                <td>{{ item.managementarea }}</td>
+                <td>{{ item.businessname }}</td>
+                <td>{{ item.certificationauthority }}</td>
+                <td>{{ item.updatedate|date:"Y-m-d H:i:s" }}</td>
+                <td>
+                    <a href="/company_more_info/?id={{ item.id }}">更多信息</a>
+                    <a href="#">编辑</a>
+                    <a href="#">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+</table>
+</form>
+
+<div id="pagination" class="pagetype">
+    <ul id="pagination-flickr">
+    {% if companylist.has_previous %}
+    <li class="previous"><a href="?page={{ companylist.previous_page_number }}">&laquo;上一页</a></li>
+    {% else %}
+    <li class="previous-off">&laquo;上一页</li>
+    {% endif %}
+     <li class="active">{{ companylist.number }}/{{ companylist.paginator.num_pages }}</li>
+    {% if companylist.has_next %}
+      <li class="next"><a href="?page={{ companylist.next_page_number }}">下一页 &raquo;</a></li>
+    {% else %}
+      <li class="next-off">下一页 &raquo;</li>
+    {% endif %}
+   </ul>
+</div>
+</body>
+</html>

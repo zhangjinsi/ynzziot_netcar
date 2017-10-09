@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/css/base.css" rel='stylesheet' type='text/css' />
+    <style type="text/css">
+    body,td,th {
+        font-size: 16px;
+        color: #000;
+    }
+    </style>
+    <title>司机信息查询</title>
+</head>
+<body>
+{% load myfilter %}
+<form action="/car_more_info/" method="post" class="listtype">
+
+
+  <p><b>车辆信息</b></p>
+  <table cellpadding="0" cellspacing="0" border="1"  class="listtype">
+
+    <tr>
+      <td height="39">车牌号码</td>
+      <td colspan="3"><p>{{ carlist.license_plate }}</p></td>
+      <td>车主</td>
+      <td colspan="2"><p >{{ carlist.car_owner }}</p></td>
+       <td>车辆注册地点</td>
+      <td colspan="2"><p >{{ carlist.registration_location }}</p></td>
+       <td>车辆类型</td>
+      <td colspan="2"><p >{{ carlist.vehicle_type }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">车身颜色</td>
+      <td colspan="3"><p>{{ carlist.body_color }}</p></td>
+      <td>核定重量</td>
+      <td colspan="2"><p >{{ carlist.weight }}</p></td>
+        <td>年审日期</td>
+      <td colspan="2"><p >{{ carlist.date_of_inspection|long_to_time }}</p></td>
+       <td>登记日期</td>
+      <td colspan="2"><p >{{ carlist.record_date|long_to_time }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">核定载客位</td>
+      <td colspan="3"><p>{{ carlist.busload }}</p></td>
+      <td>车辆厂牌</td>
+      <td colspan="2"><p >{{ carlist.labelnumber }}</p></td>
+      <td>运输证字号</td>
+      <td colspan="2"><p >{{ carlist.transportcertificate }}</p></td>
+       <td>运输证发证机构</td>
+      <td colspan="2"><p >{{ carlist.tcissuingauthority }}</p></td>
+    </tr>
+     <tr>
+      <td height="39">发动机号</td>
+      <td colspan="3"><p>{{ carlist.enginenumber }}</p></td>
+      <td>车辆VIN码</td>
+      <td colspan="2"><p >{{ carlist.vinnumber }}</p></td>
+      <td>车辆燃料类型</td>
+      <td colspan="2"><p >{{ carlist.fueltype }}</p></td>
+       <td>发动机排量</td>
+      <td colspan="2"><p >{{ carlist.displacement }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">保险公司</td>
+      <td colspan="3"><p>{{ carlist.insurancecompany }}</p></td>
+      <td>保险号</td>
+      <td colspan="2"><p >{{ carlist.insurancenumber }}</p></td>
+      <td>保险类型</td>
+      <td colspan="2"><p >{{ carlist.insurancetype }}</p></td>
+       <td>保险金额</td>
+      <td colspan="2"><p >{{ carlist.insuranceamount }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">保险生效日期</td>
+      <td colspan="3"><p>{{ carlist.insuranceeffectivedate|long_to_time }}</p></td>
+      <td>保险到期日期</td>
+      <td colspan="2"><p >{{ carlist.insuranceexpirationdate|long_to_time }}</p></td>
+      <td>行驶总里程</td>
+      <td colspan="2"><p >{{ carlist.totalmileage }}</p></td>
+       <td>绑定的设备</td>
+      <td colspan="2"><p >{{ carlist.bounddevice }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">更新日期</td>
+      <td colspan="3"><p>{{ carlist.updatedate|date:"Y-m-d H:i:s" }}</p></td>
+
+    </tr>
+
+
+
+  </table>
+  <p>&nbsp;</p>
+
+
+
+</form>
+
+
+</body>
+</html>

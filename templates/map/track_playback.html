@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>车辆轨迹回溯</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/static/css/car_track.css" />
+		<script src="/static/js/jquery-1.8.2.js"></script>
+		<script src="/static/js/track_playback.js"></script>
+		<script src="/static/js/DatePicker/WdatePicker.js"></script>
+		<script src="http://api.map.baidu.com/api?v=2.0&ak=ziOuEw4EeBf2oRyVCiRFzbq511vlF4pn"></script>
+		<script>
+			//定义initMap()函数
+			function initMap() {
+				var map = new BMap.Map("allmap");
+				map.centerAndZoom("昆明", 15);
+                map.enableScrollWheelZoom();
+			}
+
+
+         window.onload  =  function (){
+
+          var w = $('#iptDiv').width();
+
+          $('#toggle_btn').on('click', function() {
+            var key = $('#iptDiv').offset().left;
+            // 未展开
+            if (key < 0) {
+              $('#toggle_btn').html('◁');
+              $('#iptDiv').css('left', 0);
+            }
+            // 已展开
+            else if (key == 0) {
+              $('#toggle_btn').html('▷');
+              $('#iptDiv').css('left', (-1 * w - 10));
+            }
+          });
+        }
+
+		</script>
+		<style>
+
+.button-group {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 12px;
+  padding: 10px;
+  z-index: 102;
+}
+
+
+.button-group .button {
+  height: 28px;
+  line-height: 28px;
+  background-color: #0D9BF2;
+  color: #FFF;
+  border: 0;
+  outline: none;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+.button{
+    border:1px solid #fff;
+    color:#fff;
+    height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: transparent;
+}
+.check_ipt {
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  font-size: 18px;
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+}
+#iptDiv{
+  position: absolute;
+  top: 0;
+  left: -350px;
+  z-index: 1002;
+  padding: 10px;
+  padding-right: 30px;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease-in;
+  /*display: none;*/
+}
+.toggle_btn {
+  margin-left: 10px;
+  color: white;
+  cursor: pointer;
+
+}
+#iptDiv>#toggle_btn {
+  position: absolute;
+  right: 5px;
+  top: 80px;
+}
+
+.check_name1,
+.check_name2 {
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  vertical-align: middle;
+  font-size: 18px;
+  color: white;
+}
+
+
+
+
+	</style>
+
+
+	</head>
+	<body onload="initMap();">
+
+			<div id="mapDiv">
+				<form action="" method="post" target="index_right" id="form1">
+					<div id="iptDiv">
+						<!-- 下面是查询参数 -->
+						<span class="check_name1">车辆ＩＤ：</span>
+						<select name="license_plate" id="selectId" onchange="initFunction();" class="check_ipt" >
+							<option value="云A88888">云A88888</option>
+							<option value="89860116886010600124">89860116886010600124</option>
+						</select>
+						<br>
+						<br>
+						<span class="check_name1">开始时间：</span>
+						<input id="ipt1" class="Wdate" name="startTime" type="text" onclick="WdatePicker({startDate:'%y-%M-%d %h:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true});" class="check_ipt" />
+						<br>
+						<br>
+						<span class="check_name2">结束时间：</span>
+						<input id="ipt2" class="Wdate" name="endTime" type="text" onclick="WdatePicker({startDate:'%y-%M-%d %h:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true});" class="check_ipt" />
+						<br>
+						<br>
+						<input id="bt3" type="button" value="初始化" class="button" onclick="initFunction();"/>
+						<input id="bt4" type="button" value="刷新" class="button" onclick="location.reload();" />
+
+						<input id="follow" type="checkbox" />
+							<span style="font-size: 16px; color:#fff">画面跟随</span>
+                        <span class="toggle_btn" id="toggle_btn">▷</span>
+
+				</div>
+					 <div class="button-group">
+						<input id="playId" type="button" value="播放" onclick="play();"  class="button" disabled />
+						<input id="pauseId" type="button" value="暂停" onclick="pause();"  class="button" disabled />
+						<input id="resetId" type="button" value="重置" onclick="resetFunction();" class="button"  disabled />
+					</div>
+
+
+				</form>
+                 <div id="allmap"></div>
+</div>
+
+
+	</body>
+</html>
+

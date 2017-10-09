@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>车辆位置实时显示</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <style type="text/css">
+    html,body{
+        margin:0;
+        width:100%;
+        height:100%;
+        background:#ffffff;
+    }
+    #map{
+        width:100%;
+        height:100%;
+        position:absolute;
+        z-index:1001;
+    }
+    #panel {
+        position: absolute;
+        top:30px;
+        left:10px;
+        z-index: 999;
+        color: #fff;
+    }
+    #login{
+        position:absolute;
+        width:300px;
+        height:40px;
+        left:50%;
+        top:50%;
+        margin:-40px 0 0 -150px;
+    }
+    #login input[type=password]{
+        width:200px;
+        height:30px;
+        padding:3px;
+        line-height:30px;
+        border:1px solid #000;
+    }
+    #login input[type=submit]{
+        width:80px;
+        height:38px;
+        display:inline-block;
+        line-height:38px;
+    }
+    /* 左部信息 */
+    /* .section-left {
+      box-sizing: border-box;
+      margin: 0;
+      margin-right: 500px;
+      height: 100%;
+    } */
+
+    .section-left>.left-info {
+      box-sizing: border-box;
+      height: 100px;
+      padding: 10px;
+      margin-left:10px;
+      position:absolute;
+      z-index:1002;
+    }
+
+    .section-left>.left-info>div {
+      box-sizing: border-box;
+      float: left;
+      height: 100%;
+      width: 300px;
+      border-radius: 10px;
+      background-color: #f99591;
+      color: #fff;
+      padding: 5px;
+      margin:10px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      font-size:20px;
+    }
+
+    .section-left>.left-info>div:nth-child(1) {
+      background-color: #fdc787;
+    }
+
+    .section-left>.left-info>div:nth-child(2) {
+      background-color: #42b7b5;
+    }
+    .ap {
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .chart {
+      position: absolute;
+      top: 200px;
+      left: -440px;
+      z-index: 1003;
+      padding: 10px;
+      padding-right: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease-in;
+  /*display: none;*/
+}
+
+
+   .toggle_btn {
+      width:20px;
+      height:20px;
+      margin-left: 10px;
+      color: #000;
+      cursor: pointer;
+
+}
+   .chart>#toggle_btn {
+      position: absolute;
+      right: 15px;
+      top: 80px;
+}
+
+  </style>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ziOuEw4EeBf2oRyVCiRFzbq511vlF4pn"></script>
+  <script src="/static/js/track_playback.js"></script>
+  <script>
+     window.onload  =  function (){
+
+          var w = $('.chart').width();
+
+          $('#toggle_btn').on('click', function() {
+            var key = $('.chart').offset().left;
+            // 未展开
+            if (key < 0) {
+              $('#toggle_btn').html('◁');
+              $('.chart').css('left', 0);
+            }
+            // 已展开
+            else if (key == 0) {
+              $('#toggle_btn').html('▷');
+              $('.chart').css('left', (-1 * w + 5));
+            }
+          });
+        }
+
+  </script>
+</head>
+<body>
+   <div class="section-left">
+    <div class="left-info">
+        <div>
+            <span>网约车企业总数</span><br>
+            <a id="company" class="ap" name="平台基本信息"
+               href="#">{{ company_count }}</a>
+        </div>
+
+        <div>
+            <span>驾驶员总数（单位：位）</span><br>
+            <a id="driver" class="ap" name="驾驶员基本信息"
+               href="#">{{ driver_count }}</a>
+        </div>
+
+        <div>
+            <span>车辆总数（单位：辆）</span><br>
+            <a id="car" class="ap" name="车辆基本信息"
+               href="#">{{ car_count }}</a>
+        </div>
+    </div>
+  </div>
+
+   <div class="chart">
+      <div class="chart1">
+        <iframe src="/static/js/echarts/bar-tick-align.html" width="420" height="200" frameborder="0" scrolling="no"></iframe>
+        <span class="toggle_btn" id="toggle_btn">▷</span>
+      </div>
+
+      <div class="chart2">
+        <iframe src="/static/js/echarts/area-simple.html" width="420" height="200" frameborder="0" scrolling="no"></iframe>
+      </div>
+   </div>
+
+
+
+    <div id="map"></div>
+    <script src="/static/js/jquery-1.8.2.js"></script>
+    <script type="text/javascript">
+
+    var map = new BMap.Map("map", {});                        // 创建Map实例
+    map.centerAndZoom(new BMap.Point(102.725874, 25.05071), 13);     // 初始化地图,设置中心点坐标和地图级别
+    map.enableScrollWheelZoom();                        //启用滚轮放大缩小
+
+    //setInterval('going()',2000);//定时器
+
+    $.ajax({
+        url:'/positionget/',
+        type:'POST',
+        success:function(callback){
+            var data = jQuery.parseJSON(callback);
+            console.log(callback);
+            if (document.createElement('canvas').getContext) {  // 判断当前浏览器是否支持绘制海量点
+                var points = [];  // 添加海量点数据
+                for (var i = 0; i < data.length; i++) {
+                  points.push(new BMap.Point(data[i].longitude, data[i].latitude));
+
+                }
+
+                var options = {
+                    size: BMAP_POINT_SIZE_BIGGER,//BIG,HUGE
+                    shape: BMAP_POINT_SHAPE_CIRCLE,
+                    color: '#FF0000'
+                }
+
+                var pointCollection = new BMap.PointCollection(points, options);  // 初始化PointCollection
+                pointCollection.addEventListener('click', function (e) {
+                    var license_plate = "";
+                    var serial_number = "";
+                    var order_number = "";
+                    var speed = "";
+                    var lng  = "";
+                    var lat  = "";
+
+                    var time = "";//时间
+                    var management_status = "";//车辆信息
+                    //关于自定义信息 修改json [[经度,维度,1,车牌,时间,车辆信息]]
+                    //循环查出值
+                    for (var i = 0; i < data.length; i++) {
+                    //points.push(new BMap.Point(data[i].longitude, data[i].latitude));
+                    if(data[i].longitude==e.point.lng&&data[i].latitude==e.point.lat){//经度==点击的,维度
+                        license_plate  = data[i].device_number;
+                        serial_number  = data[i].serial_number;
+                        order_number  = data[i].order_number;
+                        speed = data[i].speed;
+                        lng  = data[i].longitude;
+                        lat  = data[i].latitude;
+
+                        time = data[i].time;
+
+                        management_status = data[i].management_status;
+                        break;
+                    }
+                    }
+                    var point = new BMap.Point(e.point.lng, e.point.lat);
+                    var opts = {
+                        width: 250, // 信息窗口宽度
+                        height: 150, // 信息窗口高度
+                        title:"", // 信息窗口标题
+                        enableMessage: false //设置允许信息窗发送短息
+                    };
+                    var infowindow = new BMap.InfoWindow( "车牌号码:" + license_plate +"<br/>设备序列号:" + serial_number +
+                            "<br/>订单编号:" + order_number +"<br/>行驶速度:" + speed +"<br/>经度:" + lng + "<br/>纬度:" + lat + "<br/>时间:" + time + "<br/>状态:" + management_status, opts);
+                    map.openInfoWindow(infowindow, point);
+                });
+                map.addOverlay(pointCollection);  // 添加Overlay
+            } else {
+                alert('请在chrome、safari、IE8+以上浏览器查看');
+            }
+        }
+    });
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/css/base.css" rel='stylesheet' type='text/css' />
+    <style type="text/css">
+    body,td,th {
+        font-size: 16px;
+        color: #000;
+    }
+    </style>
+    <title>司机信息查询</title>
+</head>
+<body>
+{% load myfilter %}
+<form action="/driver_more_info/" method="post" class="listtype">
+
+
+  <p><b>司机信息</b></p>
+  <table cellpadding="0" cellspacing="0" border="1"  class="listtype">
+
+    <tr>
+      <td width="64" height="33">司机姓名</td>
+      <td width="109">{{ driverlist.name }}</td>
+      <td width="73">所属公司</td>
+      <td width="46">{{ driverlist.owned_company }}</td>
+      <td width="112">司机编号</td>
+      <td width="159">{{ driverlist.identifier }}</td>
+      <td width="154" rowspan="4"><p ><img src="{{ photo }}" width="154" height="203" /></p></td>
+    </tr>
+    <tr>
+      <td height="31">性别</td>
+      <td>{{ driverlist.gender|gender_filter }}</td>
+      <td>国籍</td>
+      <td>{{ driverlist.nationality }}</td>
+      <td>准驾车型</td>
+      <td>{{ driverlist.quasi_car_type }}</td>
+    </tr>
+    <tr>
+      <td height="31">初次领证日期</td>
+      <td>{{ driverlist.issue_date|long_to_time }}</td>
+      <td>有效日期</td>
+      <td>{{ driverlist.valid_date|long_to_time }}</td>
+      <td>出生日期</td>
+      <td>{{ driverlist.birth|long_to_time }}</td>
+    </tr>
+    <tr>
+      <td height="46">驾驶证号</td>
+      <td colspan="3">{{ driverlist.license_number }}</td>
+      <td>电话号码</td>
+      <td>{{ driverlist.phone_number }}</td>
+    </tr>
+    <tr>
+      <td height="39">驾驶员民族</td>
+      <td>{{ driverlist.nation }}</td>
+      <td>驾驶员婚姻状况</td>
+      <td colspan="2">{{ driverlist.maritalstatus|yes_to_true }}</td>
+      <td>所驾驶车牌号码</td>
+      <td>{{ driverlist.car_info }}</td>
+    </tr>
+    <tr>
+      <td height="39">驾驶员学历</td>
+      <td colspan="3"><p>{{ driverlist.driverdegree }}</p></td>
+      <td>是否巡游出租驾驶员</td>
+      <td colspan="2"><p >{{ driverlist.cruisedrivers|yes_to_true }}</p></td>
+    </tr>
+
+    <tr>
+      <td><p >发证机构</p></td>
+      <td colspan="4"><p >{{ driverlist.certificationauthority }}</p></td>
+      <td><p >资格发证日期</p></td>
+      <td><p >{{ driverlist.qualificatcertificatdate|long_to_time }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">资格有效期止</td>
+      <td colspan="3"><p>{{ driverlist.qualificatvaliditydate|long_to_time }}</p></td>
+      <td>培训课程名称</td>
+      <td colspan="2"><p >{{ driverlist.trainingcoursename }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">培训开始时间</td>
+      <td colspan="3"><p>{{ driverlist.trainingstarttime|long_to_time }}</p></td>
+      <td>培训结束始时间</td>
+      <td colspan="2"><p >{{ driverlist.trainingendtime|long_to_time }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">培训时长（小时）</td>
+      <td colspan="3"><p>{{ driverlist.lengthoftraining }}</p></td>
+      <td>更新日期</td>
+      <td colspan="2"><p >{{ driverlist.updatedate|date:"Y-m-d H:i:s" }}</p></td>
+    </tr>
+
+
+
+  </table>
+  <p>&nbsp;</p>
+
+
+
+</form>
+
+
+</body>
+</html>

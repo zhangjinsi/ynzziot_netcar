@@ -1,0 +1,53 @@
+驾驶员信息：所属公司、司机编号、驾驶员姓名、驾驶证号、性别、国籍、出生日期、准驾车型、初次领证日期、有效日期、电话号码     正在驾驶车辆——外键：车辆信息_车牌号码     驾驶员民族、驾驶员婚姻状况、驾驶员学历、是否巡游出租驾驶员、发证机构、资格发证日期、培训课程名称、培训开始时间、培训结束时间、培训时长、更新日期
+Driver:owned_company  identifier  name  license_number  gender nationality  birth quasi_car_type issue_date  valid_date phone_number car_info
+
+车辆信息: 车牌号码、车主、车辆注册地点、车辆类型、车身颜色、核定重量、年审日期、登记日期、    核定载客位、车辆厂牌、运输证字号、运输证发证机构、发动机号、车辆VIN码、车辆燃料类型、发动机排量、保险公司、保险号、保险类型、保险金额、保险生效日期、保险到期时间、行驶总里程、更新日期、绑定的设备
+Carinfo:license_plate car_owner registration_location vehicle_type body_color weight date_of_inspection record_date
+
+设备工作信息（历史）：设备编号、设备序列号、订单编号、行政区划编号、定位时间、经度、纬度、瞬时速度、海拔高度、方向角、经营状态
+Deviceinfohis:device_number serial_number order_number division_number time longitude latitude speed altitude direction_angle management_status
+
+设备工作信息（实时）：设备编号、设备序列号、订单编号、行政区划编号、定位时间、经度、纬度、瞬时速度、海拔高度、方向角、经营状态
+Deviceinforeal:device_number serial_number order_number division_number time longitude latitude speed altitude direction_angle management_status
+
+
+网约车平台基本信息：公司名称  统一社会信用代码  注册地行政区划  经营业户经济类型  注册资本  法人代表姓名  法人身份证号  法人代表电话  通讯地址  经营范围  经营区域  业户名称  发证机构名称  有效期起  有效期止  初次发证日期  证照状态  平台注册网约车辆数  平台注册驾驶员数  操作标识
+
+
+
+
+行政区域划分
+530100         　昆明市
+　　530101     　　市辖区
+　　530102     　　五华区
+　　530103     　　盘龙区
+　　530111     　　官渡区
+　　530112     　　西山区
+　　530113     　　东川区
+　　530114     　　呈贡区
+　　530122     　　晋宁县
+　　530124     　　富民县
+　　530125     　　宜良县
+　　530126     　　石林彝族自治县
+　　530127     　　嵩明县
+　　530128     　　禄劝彝族苗族自治县
+　　530129     　　寻甸回族彝族自治县
+　　530181     　　安宁市
+
+Django框架models使用group by的方法：
+
+首先，看下列代码：
+
+UserData.objects.filter(hubid=sensorid,time__range=(time2,time1)).values('hour').annotate(sum_out=Sum('outdoor'), sum_in=Sum('indoor'), sum_eat=Sum('kitchen'), sum_wash=Sum('toilet')).order_by('hour')
+1
+上述代码相当于sql语句：
+
+select Sum('outdoor') as sum_out,Sum('indoor') as sum_in,Sum('kitchen') as sum_eat,Sum('toilet') as sum_wash,hour
+where hubid='sensorid' and (time between time1 and time2)
+group by hour
+order by hour asc
+1
+2
+3
+4
+另外，在Django中order_by(‘hour’)表示按生序排列，若要按降序排列，则使用order_by(‘-hour’)

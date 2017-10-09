@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/css/base.css" rel='stylesheet' type='text/css' />
+    <title>司机信息查询</title>
+</head>
+<body>
+{% load myfilter %}
+<form action="/driverlist/" method="post">
+<div class="selectstype">
+    所属公司:<input type="text" name="owned_company" placeholder="所属公司" />
+    驾驶员姓名:<input type="text" name="name" placeholder="驾驶员姓名" />
+    驾驶证号:<input type="text" name="license_number" placeholder="驾驶证号" />
+    发证机构:<input type="text" name="certificationauthority" placeholder="发证机构" />
+
+    <input type="submit" value="查询">
+
+</div>
+<table border="1" class="listtype">
+        <tr align="center" bgcolor="#e1ffc1">
+            <td width="30"  align="center">所属公司</td>
+            <td width="30"  align="center">司机编号</td>
+            <td width="50"  align="center">驾驶员姓名</td>
+            <td width="70"  align="center">驾驶证号</td>
+            <td width="20"  align="center">性别</td>
+            <td width="40"  align="center">国籍</td>
+            <td width="100"  align="center">出生日期</td>
+            <td width="30"  align="center">准驾车型</td>
+            <td width="100"  align="center">初次领证日期</td>
+            <td width="85"  align="center">有效日期</td>
+            <td width="75"  align="center">电话号码</td>
+            <td width="40"  align="center">驾驶员民族</td>
+            <td width="65"  align="center">驾驶员婚姻状况</td>
+            <td width="100"  align="center">更新日期</td>
+            <td width="80"  align="center">操作</td>
+        </tr>
+        {% for item in driverlist %}
+            <tr>
+                <td>{{ item.owned_company }}</td>
+                <td>{{ item.identifier }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.license_number }}</td>
+                <td>{{ item.gender|gender_filter }}</td>
+                <td>{{ item.nationality }}</td>
+                <td>{{ item.birth|long_to_time }}</td>
+                <td>{{ item.quasi_car_type }}</td>
+                <td>{{ item.issue_date|long_to_time }}</td>
+                <td>{{ item.valid_date|long_to_time }}</td>
+                <td>{{ item.phone_number }}</td>
+                <td>{{ item.nation }}</td>
+                <td>{{ item.maritalstatus|yes_to_true }}</td>
+                <td>{{ item.updatedate|date:"Y-m-d H:i:s" }}</td>
+                <td>
+                    <a href="/driver_more_info/?id={{ item.id }}">更多信息</a>
+                    <a href="#">编辑</a>
+                    <a href="#">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+</table>
+</form>
+
+<div id="pagination" class="pagetype">
+    <ul id="pagination-flickr">
+    {% if driverlist.has_previous %}
+    <li class="previous"><a href="?page={{ driverlist.previous_page_number }}">&laquo;上一页</a></li>
+    {% else %}
+    <li class="previous-off">&laquo;上一页</li>
+    {% endif %}
+     <li class="active">{{ driverlist.number }}/{{ driverlist.paginator.num_pages }}</li>
+    {% if driverlist.has_next %}
+      <li class="next"><a href="?page={{ driverlist.next_page_number }}">下一页 &raquo;</a></li>
+    {% else %}
+      <li class="next-off">下一页 &raquo;</li>
+    {% endif %}
+   </ul>
+</div>
+</body>
+</html>

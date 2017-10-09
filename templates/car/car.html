@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/css/base.css" rel='stylesheet' type='text/css' />
+    <title>司机信息查询</title>
+</head>
+<body>
+{% load myfilter %}
+<form action="/carlist/" method="post">
+<div class="selectstype">
+    车牌号码:<input type="text" name="license_plate" placeholder="车牌号码" />
+    车主:<input type="text" name="car_owner" placeholder="车主" />
+    车辆燃料类型:<input type="text" name="fueltype" placeholder="车辆燃料类型" />
+    绑定的设备:<input type="text" name="bounddevice" placeholder="绑定的设备" />
+
+    <input type="submit" value="查询">
+
+</div>
+<table border="1" class="listtype">
+        <tr align="center" bgcolor="#e1ffc1">
+            <td width="50"  align="center">车牌号码</td>
+            <td width="40"  align="center">车主</td>
+            <td width="75"  align="center">辆注册地点</td>
+            <td width="70"  align="center">车辆类型</td>
+            <td width="40"  align="center">车身颜色</td>
+            <td width="40"  align="center">核定重量</td>
+            <td width="100"  align="center">年审日期</td>
+            <td width="30"  align="center">登记日期</td>
+            <td width="50"  align="center">核定载客位</td>
+            <td width="85"  align="center">运输证字号</td>
+            <td width="75"  align="center">运输证发证机构</td>
+            <td width="40"  align="center">车辆燃料类型</td>
+            <td width="50"  align="center">绑定设备序列号</td>
+            <td width="50"  align="center">更新日期</td>
+            <td width="80"  align="center">操作</td>
+        </tr>
+        {% for item in carlist %}
+            <tr>
+                <td>{{ item.license_plate }}</td>
+                <td>{{ item.car_owner }}</td>
+                <td>{{ item.registration_location }}</td>
+                <td>{{ item.vehicle_type }}</td>
+                <td>{{ item.body_color }}</td>
+                <td>{{ item.weight }}</td>
+                <td>{{ item.date_of_inspection|long_to_time }}</td>
+                <td>{{ item.record_date|long_to_time }}</td>
+                <td>{{ item.busload }}</td>
+                <td>{{ item.transportcertificate }}</td>
+                <td>{{ item.tcissuingauthority }}</td>
+                <td>{{ item.fueltype }}</td>
+                <td>{{ item.bounddevice }}</td>
+                <td>{{ item.updatedate|date:"Y-m-d H:i:s" }}</td>
+                <td>
+                    <a href="/car_more_info/?id={{ item.id }}">更多信息</a>
+                    <a href="#">编辑</a>
+                    <a href="#">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+</table>
+</form>
+
+<div id="pagination" class="pagetype">
+    <ul id="pagination-flickr">
+    {% if carlist.has_previous %}
+    <li class="previous"><a href="?page={{ carlist.previous_page_number }}">&laquo;上一页</a></li>
+    {% else %}
+    <li class="previous-off">&laquo;上一页</li>
+    {% endif %}
+     <li class="active">{{ carlist.number }}/{{ carlist.paginator.num_pages }}</li>
+    {% if carlist.has_next %}
+      <li class="next"><a href="?page={{ carlist.next_page_number }}">下一页 &raquo;</a></li>
+    {% else %}
+      <li class="next-off">下一页 &raquo;</li>
+    {% endif %}
+   </ul>
+</div>
+</body>
+</html>

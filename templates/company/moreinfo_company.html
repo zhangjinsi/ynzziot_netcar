@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/css/base.css" rel='stylesheet' type='text/css' />
+    <style type="text/css">
+    body,td,th {
+        font-size: 16px;
+        color: #000;
+    }
+    </style>
+    <title>司机信息查询</title>
+</head>
+<body>
+{% load myfilter %}
+<form action="/company_more_info/" method="post" class="listtype">
+
+
+  <p><b>网约车公司信息</b></p>
+  <table cellpadding="0" cellspacing="0" border="1"  class="listtype">
+
+    <tr>
+      <td height="39">公司名称</td>
+      <td colspan="3"><p>{{ companylist.companyname }}</p></td>
+      <td>统一社会信用代码</td>
+      <td colspan="2"><p >{{ companylist.uniformsocialcreditcode }}</p></td>
+       <td>注册地行政区划</td>
+      <td colspan="2"><p >{{ companylist.registrydivisions }}</p></td>
+       <td>经营业户经济类型</td>
+      <td colspan="2"><p >{{ companylist.economicoperationtype }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">注册资本</td>
+      <td colspan="3"><p>{{ companylist.registeredcapital }}</p></td>
+      <td>法人代表</td>
+      <td colspan="2"><p >{{ companylist.legalrepresentative }}</p></td>
+      <td>法人身份证号</td>
+      <td colspan="2"><p >{{ companylist.legalpersonidentification }}</p></td>
+      <td>电话号码</td>
+      <td colspan="2"><p >{{ companylist.phone_number }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">通讯地址</td>
+      <td colspan="3"><p>{{ companylist.address }}</p></td>
+      <td>经营范围</td>
+      <td colspan="2"><p >{{ companylist.businessscope }}</p></td>
+      <td>经营区域</td>
+      <td colspan="2"><p >{{ companylist.managementarea }}</p></td>
+       <td>业户名称</td>
+      <td colspan="2"><p >{{ companylist.businessname }}</p></td>
+    </tr>
+     <tr>
+      <td height="39">发证机构</td>
+      <td colspan="3"><p>{{ companylist.certificationauthority }}</p></td>
+      <td>发证日期</td>
+      <td colspan="2"><p >{{ companylist.issuedate }}</p></td>
+      <td>有效期止</td>
+      <td colspan="2"><p >{{ companylist.validitydate }}</p></td>
+       <td>证照状态</td>
+      <td colspan="2"><p >{{ companylist.licensestatus }}</p></td>
+    </tr>
+    <tr>
+      <td height="39">平台注册网约车辆数</td>
+      <td colspan="3"><p>{{ companylist.platformcarnumber }}</p></td>
+      <td>平台注册驾驶员数</td>
+      <td colspan="2"><p>{{ companylist.platformdrivernumber }}</p></td>
+      <td height="39">更新日期</td>
+      <td colspan="3"><p>{{ companylist.updatedate|date:"Y-m-d H:i:s" }}</p></td>
+
+    </tr>
+
+
+
+  </table>
+  <p>&nbsp;</p>
+
+
+
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <script src="/static/js/jquery-1.8.2.js"></script>
+       <script type="text/javascript">
+           $.ajax({
+                url:'/divisionnumber/',
+                type:'POST',
+                success:function(callback){
+                    window.a = callback;
+
+                }
+            });
+       </script>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="/static/js/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="/static/js/echarts/ecStat.min.js"></script>
+       <script type="text/javascript" src="/static/js/echarts/dataTool.min.js"></script>
+       <script type="text/javascript" src="/static/js/echarts/china.js"></script>
+       <script type="text/javascript" src="/static/js/echarts/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="/static/js/echarts/bmap.min.js"></script>
+
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+app.title = '各区域车辆信息';
+
+
+
+option = {
+    color: ['#3398DB'],
+
+
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    title: {
+
+        text: '各区域车辆数量信息',
+        left: 'center'
+    },
+
+    xAxis : [
+        {
+            type : 'category',
+            data : ['五华区', '西山区', '盘龙区', '官渡区', '呈贡区'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    series : [
+        {
+            name:'车辆总数（单位：辆）',
+            type:'bar',
+            barWidth: '60%',
+            data:[window.a[0],window.a[1],window.a[2],window.a[3],window.a[4]]
+        }
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
